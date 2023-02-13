@@ -1,0 +1,10 @@
+<div class="transaction_card_container">
+    <div class="transaction_card_container__info_block">
+        <span class="transaction_card_container__info_block--description"> {{transaction?.description}}</span>
+        <span class="transaction_card_container__info_block--names"> {{transaction?.name}}</span>
+        <span class="transaction_card_container__info_block--date">{{transaction?.date}}</span>
+    </div>
+    <div class="transaction_card_container__amount_block">
+        {{transaction?.amount | currency: 'EUR'}}
+    </div>
+</div>

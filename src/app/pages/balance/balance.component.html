@@ -1,0 +1,19 @@
+<div class="balance_container">
+    <div class="balance_container__balance">
+        <h1>Balance</h1>
+        <ng-container *ngFor="let b of balance">
+            <div>
+                <span>{{b.name}} {{b.surname}}</span>
+                <span appBalance [amount]="b.balance">{{b.balance | currency: 'EUR'}}</span>
+            </div>
+        </ng-container>
+    </div>
+    <div class="balance_container__debts">
+        <h1>Saldo de deudas</h1>
+        <ng-container *ngFor="let d of debts">
+            <div>
+                <span>{{d.from}} debe {{d.amount | currency: 'EUR'}} a {{d.to}}</span>
+            </div>
+        </ng-container>
+    </div>
+</div>

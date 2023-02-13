@@ -1,0 +1,27 @@
+.member_card_container {
+    height: 100px;
+    display: flex;
+    background-color: #FFFFFF;
+    border: 1px solid;
+    justify-content: space-around;
+    align-items: center;
+    margin-top: 10px;
+    &__info_block {
+        display: flex;
+        flex-direction: column;
+        min-width: 200px;
+        &--description {
+            font-weight: bold;
+        }
+        &--names {
+            font-weight: bold;
+        }
+        &--description {
+           
+        }
+    }
+}
+
+:host {
+    width: 100%;
+}

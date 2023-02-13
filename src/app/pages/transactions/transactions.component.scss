@@ -1,0 +1,13 @@
+.transaction_container {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    &__button {
+        margin-top: 10px;
+        span {
+            cursor: pointer;
+            font-weight: bold;
+        }
+    }
+}

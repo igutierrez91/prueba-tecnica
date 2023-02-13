@@ -1,0 +1,6 @@
+<input type="text" [(ngModel)]="value" (input)="suggest()" (click)="suggest()">
+<div class="suggestions" *ngIf="suggestions.length">
+  <div class="suggestions__options" *ngFor="let s of suggestions">
+    <p (click)="select(s)">{{s.label}}</p>
+  </div>
+</div>

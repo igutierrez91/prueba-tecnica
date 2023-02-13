@@ -1,0 +1,34 @@
+<div class="transaction_container">
+    <div class="transaction_container__button">
+        <span (click)="addTransaction()">Añádir pago</span>
+    </div>
+    <ng-container *ngFor="let transaction of transactions | orderBy:'date'">
+        <app-transaction-card [transaction]="transaction"></app-transaction-card>
+    </ng-container>
+</div>
+
+<app-modal>
+    <div modal-body>
+        <div *ngIf="transactionForm">
+            <form [formGroup]="transactionForm">
+                <p>
+                    <label for="firstname">Miembro </label>
+                    <app-autocomplete formControlName="member" [options]="options"></app-autocomplete>
+                </p>
+                <p>
+                    <label for="amount">Cantidad </label>
+                    <input type="number" id="amount" name="amount" formControlName="amount">
+                </p>
+                <p>
+                    <label for="description">Descripcion </label>
+                    <input type="description" id="description" name="description" formControlName="description">
+                </p>
+                <p>
+                    <label for="firstname">Fecha </label>
+                    <input type="date" id="date" name="date" formControlName="date">
+                </p>
+                <button (click)="sendTransaction()" [disabled]="transactionForm.invalid">Confirmar</button>
+            </form>
+        </div>
+    </div>
+</app-modal>

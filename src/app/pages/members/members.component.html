@@ -1,0 +1,23 @@
+<div class="member_container">
+    <div class="member_container__button">
+        <span (click)="addMember()">Añádir miembro</span>
+    </div>
+    <ng-container *ngFor="let m of members" >
+        <app-member-card [member]="m"></app-member-card>
+    </ng-container>
+</div>
+
+
+<app-modal>
+    <div modal-body>
+        <div *ngIf="memberForm">
+            <form [formGroup]="memberForm">
+                <p>
+                    <label for="name">Miembro </label>
+                    <input type="text" id="name" name="name" formControlName="name">
+                </p>
+                <button (click)="sendMember()" [disabled]="memberForm.invalid">Confirmar</button>
+            </form>
+        </div>
+    </div>
+</app-modal>
