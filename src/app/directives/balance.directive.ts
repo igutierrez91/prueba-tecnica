@@ -9,7 +9,6 @@ export class BalanceDirective implements OnChanges{
   }
 
   ngOnChanges() {
-    console.log("1:" + this.amount)
     if (this.amount < 0) {
       this.renderer.setStyle(this.el.nativeElement, 'color', 'red');
     } else if (this.amount > 0) {

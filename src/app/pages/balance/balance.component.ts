@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { forkJoin } from 'rxjs';
+import { forkJoin, switchMap } from 'rxjs';
 import { Debt } from 'src/app/models/debt';
 import { Transaction } from 'src/app/models/transaction';
 import { ExpensesService } from 'src/app/services/expenses.service';
@@ -18,12 +18,14 @@ export class BalanceComponent implements OnInit {
     
   }
   ngOnInit(): void {
-    forkJoin([this.expensesService.getBalance(), this.expensesService.getDebts()])
-    .subscribe((data) => {
-      console.log(data)
-      this.balance = data[0];
-      this.debts = data[1];
-    })
+    this.expensesService.getBalancePerUser().pipe(
+      switchMap(b => {
+        this.balance = b;
+        return this.expensesService.getDebts(b)
+      })
+    ).subscribe((debts) => {
+      this.debts = debts;
+    });
   }
 
 }

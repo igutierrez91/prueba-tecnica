@@ -3,6 +3,7 @@ import { filter } from 'rxjs';
 import { Observable } from 'rxjs/internal/Observable';
 import { of } from 'rxjs/internal/observable/of';
 import { map } from 'rxjs/internal/operators/map';
+import { Balance } from '../models/balance';
 import { Debt } from '../models/debt';
 import { Member } from '../models/member';
 import { Transaction } from '../models/transaction';
@@ -30,11 +31,9 @@ export class ExpensesService {
     return of(this.members);
   }
 
-  getBalance(): Observable<any> {
-    const globalAmount = this.transactions
-      .map((t: Transaction) => t.amount)
-      .reduce((acc, current) => acc + current);
-    const paidForMember = globalAmount / this.members.length;
+  getBalancePerUser(): Observable<Balance []> {
+    const globalAmount = this.getGlobalAmount(this.transactions);
+    const paidForMember = this.getPaidForMember(globalAmount, this.members.length);
     let grouped = this.transactions.reduce(this.groupByIdPayer, []).map((t) => {
       return {
         ...t,
@@ -45,20 +44,18 @@ export class ExpensesService {
     return of(grouped);
   }
 
-  getDebts() {
-    const globalAmount = this.transactions
-      .map((t: Transaction) => t.amount)
-      .reduce((acc, current) => acc + current);
-    const paidForMember = globalAmount / this.members.length;
-    let grouped = this.transactions.reduce(this.groupByIdPayer, []).map((t) => {
-      return {
-        ...t,
-        balance: t.amount - paidForMember,
-        totalExpense: t.amount,
-      };
-    });
-    const debts = this.calculateDebts(grouped);
+  getDebts(balance: Balance[]) {
+    const debts = this.calculateDebts(balance);
     return of(debts)
+  }
+
+  getGlobalAmount(transaction: Transaction []) {
+    return transaction.map((t: Transaction) => t.amount)
+    .reduce((acc, current) => acc + current);
+  }
+
+  getPaidForMember(globalAmount: number, numMembers: number) {
+    return globalAmount / numMembers;
   }
 
   postTransaction(transaction: Transaction) {
@@ -93,9 +90,9 @@ export class ExpensesService {
     return newArr;
   }
 
-  calculateDebts(balance: any[]): Debt [] | [] {
-    let debtors = balance.filter((b) => b.balance < 0);
-    let creditors = balance.filter((b) => b.balance > 0);
+  calculateDebts(balance: Balance[]): Debt [] {
+    let debtors = balance.filter((b) => b.balance < 0).map((b) => { return {...b}});
+    let creditors = balance.filter((b) => b.balance > 0).map((b) => { return {...b}});
     let debts: Debt [] = [];
     debtors.forEach(debtor => {
       creditors.forEach(creditor => {
